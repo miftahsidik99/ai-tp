@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Tujuan Pembelajaran Kompleks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        
+        form,
+        #hasil {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        
+        #hasil {
+            margin-top: 20px;
+        }
+        
+        #hasil h3 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="formPembelajaran">
+        <label for="elemen">Elemen:</label>
+        <input type="text" id="elemen" required>
+
+        <label for="capaian">Capaian Pembelajaran:</label>
+        <textarea id="capaian" required></textarea>
+
+        <label for="tingkatKognitif">Tingkat Kognitif:</label>
+        <select id="tingkatKognitif">
+            <option value="C1">C1 - Mengingat</option>
+            <option value="C2">C2 - Memahami</option>
+            <option value="C3">C3 - Menerapkan</option>
+            <option value="C4">C4 - Menganalisis</option>
+            <option value="C5">C5 - Mengevaluasi</option>
+            <option value="C6">C6 - Mencipta</option>
+        </select>
+
+        <label for="bidangIlmu">Bidang Ilmu:</label>
+        <input type="text" id="bidangIlmu" required>
+
+        <button type="submit">Generate</button>
+    </form>
+
+    <div id="hasil"></div>
+    <div id="histori">
+        <h3>Histori Generate:</h3>
+        <ul id="historiList"></ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+    <script>
+        const kataKerjaOperasional = {
+            C1: ["mengidentifikasi", "menyebutkan", "mengenali", "mengingat kembali"],
+            C2: ["menjelaskan", "mengklasifikasikan", "membandingkan", "menafsirkan"],
+            C3: ["menerapkan", "mengimplementasikan", "menggunakan", "menghitung"],
+            C4: ["menganalisis", "membedakan", "mengorganisir", "mengintegrasikan"],
+            C5: ["mengevaluasi", "mengkritik", "menilai", "menyimpulkan"],
+            C6: ["merancang", "mengembangkan", "merumuskan", "menciptakan"]
+        };
+
+        function getRandomKKO(tingkat) {
+            const kkos = kataKerjaOperasional[tingkat];
+            return kkos[Math.floor(Math.random() * kkos.length)];
+        }
+
+        let historiItems = [];
+
+        document.getElementById('formPembelajaran').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const elemen = document.getElementById('elemen').value;
+            const capaian = document.getElementById('capaian').value;
+            const tingkatKognitif = document.getElementById('tingkatKognitif').value;
+            const bidangIlmu = document.getElementById('bidangIlmu').value;
+
+            const kko1 = getRandomKKO(tingkatKognitif);
+            const kko2 = getRandomKKO(tingkatKognitif);
+            const kko3 = getRandomKKO(tingkatKognitif);
+
+            const tujuanPembelajaran = `
+                1. Siswa mampu ${kko1} konsep ${elemen} dalam konteks ${bidangIlmu}.
+                2. Siswa dapat ${kko2} hubungan antara ${elemen} dengan ${capaian}.
+                3. Siswa berhasil ${kko3} penerapan ${elemen} untuk mencapai ${capaian}.
+            `;
+
+            const alurTujuanPembelajaran = `
+                1. Pengenalan Konsep (15%):
+                   - Definisi dan sejarah ${elemen}
+                   - Teori dasar terkait ${elemen} dalam ${bidangIlmu}
+
+                2. Eksplorasi Mendalam (30%):
+                   - Analisis komponen-komponen ${elemen}
+                   - Studi kasus penerapan ${elemen} dalam ${bidangIlmu}
+
+                3. Praktik dan Aplikasi (35%):
+                   - Latihan penerapan ${elemen} dalam situasi nyata
+                   - Proyek kolaboratif terkait ${elemen} dan ${capaian}
+
+                4. Evaluasi dan Refleksi (20%):
+                   - Presentasi hasil proyek
+                   - Diskusi kritis tentang implikasi ${elemen} terhadap ${capaian}
+
+                5. Sintesis dan Pengembangan (10%):
+                   - Perumusan ide inovatif terkait ${elemen}
+                   - Penyusunan rencana pengembangan ${capaian} berbasis ${elemen}
+            `;
+
+            const hasilGenerate = `
+                <h3>Hasil Generate:</h3>
+                <p><strong>Elemen:</strong> ${elemen}</p>
+                <p><strong>Capaian Pembelajaran:</strong> ${capaian}</p>
+                <p><strong>Bidang Ilmu:</strong> ${bidangIlmu}</p>
+                <p><strong>Tingkat Kognitif:</strong> ${tingkatKognitif}</p>
+                <p><strong>Tujuan Pembelajaran:</strong><br>${tujuanPembelajaran.replace(/\n/g, '<br>')}</p>
+                <p><strong>Alur Tujuan Pembelajaran:</strong><br>${alurTujuanPembelajaran.replace(/\n/g, '<br>')}</p>
+                <p><strong>Glosarium:</strong> [Istilah kunci terkait ${elemen} dalam ${bidangIlmu}]</p>
+                <p><strong>Alokasi Waktu:</strong> Disesuaikan dengan kompleksitas materi dan kebutuhan pembelajaran</p>
+            `;
+
+            const hasil = document.getElementById('hasil');
+            hasil.innerHTML = hasilGenerate;
+
+            // Tambahkan ke histori
+            historiItems.unshift({
+                elemen,
+                capaian,
+                bidangIlmu,
+                tingkatKognitif,
+                hasilGenerate
+            });
+            updateHistoriList();
+
+            // Tambahkan tombol unduh PDF
+            const unduhButton = document.createElement('button');
+            unduhButton.textContent = 'Unduh PDF';
+            unduhButton.onclick = () => unduhPDF(hasil);
+            hasil.appendChild(unduhButton);
+        });
+
+        function updateHistoriList() {
+            const historiList = document.getElementById('historiList');
+            historiList.innerHTML = '';
+            historiItems.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${item.elemen} - ${item.bidangIlmu}`;
+                li.onclick = () => tampilkanHasilHistori(index);
+                historiList.appendChild(li);
+            });
+        }
+
+        function tampilkanHasilHistori(index) {
+            const item = historiItems[index];
+            document.getElementById('hasil').innerHTML = item.hasilGenerate;
+            const unduhButton = document.createElement('button');
+            unduhButton.textContent = 'Unduh PDF';
+            unduhButton.onclick = () => unduhPDF(item.hasilGenerate);
+            document.getElementById('hasil').appendChild(unduhButton);
+        }
+
+        function unduhPDF(content) {
+            html2canvas(content).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jspdf.jsPDF();
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('hasil_generate.pdf');
+            });
+        }
+    </script>
+</body>
+
+</html>
